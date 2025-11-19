@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 
 import java.util.UUID;
 
-public class CategoryManagementService {
+public class CategoryManagementApplicationService {
     public UUID create(@Valid CategoryInput input) {
         return null;
     }
