@@ -6,6 +6,7 @@ import com.algaworks.algashop.product.catalog.application.product.query.ProductD
 import com.algaworks.algashop.product.catalog.application.product.query.ProductQueryService;
 import com.algaworks.algashop.product.catalog.application.utility.Mapper;
 import com.algaworks.algashop.product.catalog.domain.model.product.Product;
+import com.algaworks.algashop.product.catalog.domain.model.product.ProductNotFoundException;
 import com.algaworks.algashop.product.catalog.domain.model.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public ProductDetailOutput findById(UUID productId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException());
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
         return mapper.convert(product, ProductDetailOutput.class);
     }
 
