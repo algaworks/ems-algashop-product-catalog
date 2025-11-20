@@ -27,15 +27,15 @@ public class Category {
 
     private Boolean enabled;
 
-//    private OffsetDateTime createdAt;
-//
-//    private OffsetDateTime updatedAt;
+    private OffsetDateTime createdAt;
+
+    private OffsetDateTime updatedAt;
 
     public Category(String name, Boolean enabled) {
         this.id = IdGenerator.generateTimeBasedUUID();
         this.setName(name);
         this.setEnabled(enabled);
-//        this.createdAt = OffsetDateTime.now();
+        this.createdAt = OffsetDateTime.now();
     }
 
     public void setName(String name) {
