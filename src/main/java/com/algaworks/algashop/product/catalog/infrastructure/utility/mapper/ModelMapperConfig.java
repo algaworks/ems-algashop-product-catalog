@@ -1,6 +1,5 @@
 package com.algaworks.algashop.product.catalog.infrastructure.utility.mapper;
 
-import com.algaworks.algashop.product.catalog.application.product.management.ProductInput;
 import com.algaworks.algashop.product.catalog.application.product.query.ProductDetailOutput;
 import com.algaworks.algashop.product.catalog.application.product.query.ProductSummaryOutput;
 import com.algaworks.algashop.product.catalog.application.utility.Mapper;
