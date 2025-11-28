@@ -32,12 +32,12 @@ public class ProductFilter extends SortablePageFilter<ProductFilter.SortType> {
 
     @Override
     public SortType getSortByPropertyOrDefault() {
-        return SortType.ADDED_AT;
+        return getSortByProperty() == null ? SortType.ADDED_AT : getSortByProperty();
     }
 
     @Override
     public Sort.Direction getSortDirectionOrDefault() {
-        return Sort.Direction.ASC;
+        return getSortDirection() == null ? Sort.Direction.ASC : getSortDirection();
     }
 
     @Getter
