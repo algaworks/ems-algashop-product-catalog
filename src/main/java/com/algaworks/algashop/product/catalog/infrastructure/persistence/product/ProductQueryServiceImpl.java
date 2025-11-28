@@ -11,6 +11,7 @@ import com.algaworks.algashop.product.catalog.domain.model.product.Product;
 import com.algaworks.algashop.product.catalog.domain.model.product.ProductNotFoundException;
 import com.algaworks.algashop.product.catalog.domain.model.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,6 +36,8 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     private final Mapper mapper;
 
     private final MongoOperations mongoOperations;
+
+    private static final String findWordRegex = "(?i)%s";
 
     @Override
     public ProductDetailOutput findById(UUID productId) {
@@ -137,6 +140,17 @@ public class ProductQueryServiceImpl implements ProductQueryService {
             query.addCriteria(Criteria.where("categoryId").in(
                     (Object[]) filter.getCategoriesId()
             ));
+        }
+
+        if (StringUtils.isNotBlank(filter.getTerm())) {
+            String regexExpression = String.format(findWordRegex, filter.getTerm());
+            query.addCriteria(
+                    new Criteria().orOperator(
+                            Criteria.where("name").regex(regexExpression),
+                            Criteria.where("brand").regex(regexExpression),
+                            Criteria.where("description").regex(regexExpression)
+                    )
+            );
         }
 
         return query;
