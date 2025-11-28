@@ -22,6 +22,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -122,6 +123,20 @@ public class ProductQueryServiceImpl implements ProductQueryService {
                                 .equalTo("$regularPrice")
                 ));
             }
+        }
+
+        if (filter.getInStock() != null) {
+            if (filter.getInStock()) {
+                query.addCriteria(Criteria.where("quantityInStock").gt(0));
+            } else {
+                query.addCriteria(Criteria.where("quantityInStock").is(0));
+            }
+        }
+
+        if (filter.getCategoriesId() != null && filter.getCategoriesId().length > 0) {
+            query.addCriteria(Criteria.where("categoryId").in(
+                    (Object[]) filter.getCategoriesId()
+            ));
         }
 
         return query;
