@@ -1,7 +1,6 @@
 package com.algaworks.algashop.product.catalog.infrastructure.persistence.product;
 
 import com.algaworks.algashop.product.catalog.application.PageModel;
-import com.algaworks.algashop.product.catalog.application.ResourceNotFoundException;
 import com.algaworks.algashop.product.catalog.application.product.query.ProductDetailOutput;
 import com.algaworks.algashop.product.catalog.application.product.query.ProductFilter;
 import com.algaworks.algashop.product.catalog.application.product.query.ProductQueryService;
@@ -12,7 +11,6 @@ import com.algaworks.algashop.product.catalog.domain.model.product.ProductNotFou
 import com.algaworks.algashop.product.catalog.domain.model.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -35,10 +33,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     private final ProductRepository productRepository;
     private final Mapper mapper;
-
     private final MongoOperations mongoOperations;
-
-    private static final String findWordRegex = "(?i)%s";
 
     @Override
     public ProductDetailOutput findById(UUID productId) {
