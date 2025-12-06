@@ -39,15 +39,6 @@ public class ModelMapperConfig {
                 .addMappings(mapping -> mapping.using(fromStringToSlugConverter)
                         .map(Product::getName, ProductDetailOutput::setSlug)
                 );
-
-        modelMapper.createTypeMap(Product.class, ProductSummaryOutput.class)
-                .addMappings(mapping -> {
-                            mapping.using(fromStringToSlugConverter)
-                                    .map(Product::getName, ProductSummaryOutput::setSlug);
-                            mapping.using(fromStringToShortStringConverter)
-                                    .map(Product::getDescription, ProductSummaryOutput::setShortDescription);
-                        }
-                );
     }
 
 }
