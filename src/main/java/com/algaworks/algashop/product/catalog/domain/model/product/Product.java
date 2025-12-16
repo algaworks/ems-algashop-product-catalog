@@ -22,10 +22,10 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @CompoundIndex(name = "pidx_product_by_category_enabledTrue_salePrice",
-        def = "{'categoryId': 1, 'salePrice': 1}",
+        def = "{'category.id': 1, 'salePrice': 1}",
         partialFilter = "{'enabled': true}")
 @CompoundIndex(name = "pidx_product_by_category_enabledTrue_addedAt",
-        def = "{'categoryId': 1, 'addedAt': -1}",
+        def = "{'category.id': 1, 'addedAt': -1}",
         partialFilter = "{'enabled': true}"
 )
 public class Product {
@@ -65,8 +65,6 @@ public class Product {
 
     @LastModifiedBy
     private UUID lastModifiedByUserId;
-
-    private UUID categoryId;
 
     private ProductCategory category;
 
@@ -143,7 +141,6 @@ public class Product {
 
     public void setCategory(Category category) {
         Objects.requireNonNull(category);
-        this.categoryId = category.getId();
         this.category = ProductCategory.of(category);
     }
 
