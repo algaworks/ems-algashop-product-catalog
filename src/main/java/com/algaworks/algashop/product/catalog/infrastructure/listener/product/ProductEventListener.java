@@ -1,7 +1,6 @@
 package com.algaworks.algashop.product.catalog.infrastructure.listener.product;
 
-import com.algaworks.algashop.product.catalog.domain.model.product.ProductPlacedOnSaleEvent;
-import com.algaworks.algashop.product.catalog.domain.model.product.ProductPriceChangedEvent;
+import com.algaworks.algashop.product.catalog.domain.model.product.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class ProductEventListener {
-    
+
     @EventListener(ProductPriceChangedEvent.class)
     public void handle(ProductPriceChangedEvent event) {
         log.info("ProductPriceChangedEvent " + event);
@@ -18,6 +17,21 @@ public class ProductEventListener {
     @EventListener(ProductPlacedOnSaleEvent.class)
     public void handle(ProductPlacedOnSaleEvent event) {
         log.info("ProductPlacedOnSaleEvent " + event);
+    }
+
+    @EventListener(ProductAddedEvent.class)
+    public void handle(ProductAddedEvent event) {
+        log.info("ProductAddedEvent " + event);
+    }
+
+    @EventListener(ProductDelistedEvent.class)
+    public void handle(ProductDelistedEvent event) {
+        log.info("ProductDelistedEvent  " + event);
+    }
+
+    @EventListener(ProductListedEvent.class)
+    public void handle(ProductListedEvent event) {
+        log.info("ProductListedEvent " + event);
     }
 
 }
