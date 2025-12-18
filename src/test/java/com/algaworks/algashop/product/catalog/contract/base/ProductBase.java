@@ -80,14 +80,13 @@ public class ProductBase {
     }
 
     private void mockFilterProducts() {
-        Mockito.when(productQueryService.filter(
-                Mockito.anyInt(), Mockito.anyInt()))
+        Mockito.when(productQueryService.filter(Mockito.any()))
                 .then((answer)-> {
-                    Integer size = answer.getArgument(0);
+                    ProductFilter filter = answer.getArgument(0);
 
                     return PageModel.<ProductDetailOutput>builder()
                             .number(0)
-                            .size(size)
+                            .size(filter.getSize())
                             .totalPages(1)
                             .totalElements(2)
                             .content(

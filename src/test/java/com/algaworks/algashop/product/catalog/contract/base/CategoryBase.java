@@ -4,6 +4,7 @@ import com.algaworks.algashop.product.catalog.application.PageModel;
 import com.algaworks.algashop.product.catalog.application.category.management.CategoryInput;
 import com.algaworks.algashop.product.catalog.application.category.management.CategoryManagementApplicationService;
 import com.algaworks.algashop.product.catalog.application.category.query.CategoryDetailOutput;
+import com.algaworks.algashop.product.catalog.application.category.query.CategoryFilter;
 import com.algaworks.algashop.product.catalog.application.category.query.CategoryOutputTestDataBuilder;
 import com.algaworks.algashop.product.catalog.application.category.query.CategoryQueryService;
 import com.algaworks.algashop.product.catalog.presentation.CategoryController;
@@ -43,12 +44,12 @@ public class CategoryBase {
 
         RestAssuredMockMvc.enableLoggingOfRequestAndResponseIfValidationFails();
 
-        Mockito.when(categoryQueryService.filter(Mockito.anyInt(), Mockito.anyInt()))
+        Mockito.when(categoryQueryService.filter(Mockito.any()))
                 .then((answer)-> {
-                    Integer size = answer.getArgument(0);
+                    CategoryFilter filter = answer.getArgument(0);
                     return PageModel.<CategoryDetailOutput>builder()
                             .number(0)
-                            .size(size)
+                            .size(filter.getSize())
                             .totalPages(1)
                             .totalElements(2)
                             .content(
