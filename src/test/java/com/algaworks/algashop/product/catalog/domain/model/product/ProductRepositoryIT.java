@@ -1,5 +1,6 @@
 package com.algaworks.algashop.product.catalog.domain.model.product;
 
+import com.algaworks.algashop.product.catalog.TestcontainerMongoDBConfig;
 import com.algaworks.algashop.product.catalog.infrastructure.persistence.MongoConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -9,12 +10,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 @DataMongoTest
-@Import(MongoConfig.class)
+@Import({MongoConfig.class, TestcontainerMongoDBConfig.class})
 @Slf4j
 class ProductRepositoryIT {
 
