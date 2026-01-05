@@ -21,7 +21,7 @@ import java.util.UUID;
 @Document(collection = "products")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @CompoundIndex(name = "pidx_product_by_category_enabledTrue_salePrice",
         def = "{'category.id': 1, 'salePrice': 1}",
         partialFilter = "{'enabled': true}")
@@ -86,7 +86,7 @@ public class Product extends AbstractAggregateRoot<Product> {
         this.setSalePrice(salePrice);
         this.setCategory(category);
 
-        super.registerEvent(ProductAddedEvent.builder().productId(this.id));
+        super.registerEvent(ProductAddedEvent.builder().productId(this.id).build());
     }
 
     public void setName(String name) {
