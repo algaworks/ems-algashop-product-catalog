@@ -7,6 +7,7 @@ import com.algaworks.algashop.product.catalog.domain.model.category.CategoryNotF
 import com.algaworks.algashop.product.catalog.domain.model.category.CategoryRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -18,12 +19,14 @@ public class CategoryManagementApplicationService {
     private final CategoryRepository categoryRepository;
     private final ApplicationMessagePublisher applicationMessagePublisher;
 
+    @CacheEvict(cacheNames = "algashop:categories-filter:v1", allEntries = true)
     public UUID create(@Valid CategoryInput input) {
         Category category = new Category(input.getName(), input.getEnabled());
         categoryRepository.save(category);
         return category.getId();
     }
 
+    @CacheEvict(cacheNames = "algashop:categories-filter:v1", allEntries = true)
     public void update(UUID categoryId, CategoryInput input) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
@@ -38,6 +41,7 @@ public class CategoryManagementApplicationService {
         ));
     }
 
+    @CacheEvict(cacheNames = "algashop:categories-filter:v1", allEntries = true)
     public void disable(UUID categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
