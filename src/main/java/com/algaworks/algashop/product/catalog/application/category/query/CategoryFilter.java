@@ -2,7 +2,6 @@ package com.algaworks.algashop.product.catalog.application.category.query;
 
 import com.algaworks.algashop.product.catalog.application.utility.SortablePageFilter;
 import lombok.*;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 
 @Data
@@ -11,7 +10,7 @@ import org.springframework.data.domain.Sort;
 @EqualsAndHashCode(callSuper = true)
 public class CategoryFilter extends SortablePageFilter<CategoryFilter.SortType> {
     private String name;
-    private Boolean enabled = Boolean.TRUE;
+    private Boolean enabled;
 
     @Override
     public CategoryFilter.SortType getSortByPropertyOrDefault() {
@@ -29,14 +28,5 @@ public class CategoryFilter extends SortablePageFilter<CategoryFilter.SortType> 
         NAME("name");
 
         private final String propertyName;
-    }
-
-    public boolean isDefault() {
-        return Boolean.TRUE.equals(enabled)
-                && StringUtils.isBlank(name)
-                && getSortByPropertyOrDefault().equals(SortType.NAME)
-                && getSortDirectionOrDefault().equals(Sort.Direction.ASC)
-                && getPage() == 0
-                && getSize() == 15;
     }
 }
