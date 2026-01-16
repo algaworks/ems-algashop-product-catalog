@@ -10,16 +10,21 @@ import com.algaworks.algashop.product.catalog.domain.model.category.CategoryNotF
 import com.algaworks.algashop.product.catalog.domain.model.category.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationExpressionCriteria;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.ComparisonOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -88,5 +93,22 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
         return mapper.convert(category, CategoryDetailOutput.class);
+    }
+
+    @Override
+    public OffsetDateTime lastModified() {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.group().max("updatedAt").as("lastModified")
+        );
+        AggregationResults<Document> result = mongoOperations.aggregate(aggregation,
+                "categories", Document.class);
+
+        Document document = result.getUniqueMappedResult();
+
+        if (document == null) {
+            return OffsetDateTime.now();
+        }
+
+        return document.getDate("lastModified").toInstant().atOffset(ZoneOffset.UTC);
     }
 }
