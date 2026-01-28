@@ -31,6 +31,8 @@ management:
   endpoint:
     health:
       show-details: always
-
+      group:
+        readiness:
+          include: mongo,readinessState
 info:
   app.name: AlgaShop Product Catalog API
