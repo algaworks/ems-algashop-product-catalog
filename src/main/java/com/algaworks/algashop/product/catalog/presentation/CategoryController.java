@@ -18,6 +18,8 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import static com.algaworks.algashop.product.catalog.infrastructure.security.SecurityAnnotations.*;
+
 @RestController
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class CategoryController {
     private final CategoryManagementApplicationService categoryManagementApplicationService;
 
     @GetMapping
+    @CanReadCategories
     public ResponseEntity<PageModel<CategoryDetailOutput>> filter(CategoryFilter filter,
                                                                   WebRequest webRequest) {
         if (!filter.isCacheable()) {
@@ -49,12 +52,14 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CanWriteCategories
     public CategoryDetailOutput create(@RequestBody @Valid CategoryInput input) {
         UUID categoryId = categoryManagementApplicationService.create(input);
         return categoryQueryService.findById(categoryId);
     }
 
     @GetMapping("/{categoryId}")
+    @CanReadCategories
     public ResponseEntity<CategoryDetailOutput> findById(@PathVariable UUID categoryId) {
         CategoryDetailOutput category = categoryQueryService.findById(categoryId);
         return ResponseEntity.ok()
@@ -65,6 +70,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
+    @CanWriteCategories
     public CategoryDetailOutput update(
             @PathVariable UUID categoryId,
             @RequestBody @Valid CategoryInput input) {
@@ -74,6 +80,7 @@ public class CategoryController {
 
     @DeleteMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CanWriteCategories
     public void disable(@PathVariable UUID categoryId) {
         categoryManagementApplicationService.disable(categoryId);
     }
