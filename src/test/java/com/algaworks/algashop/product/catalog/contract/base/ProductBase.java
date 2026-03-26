@@ -9,6 +9,7 @@ import com.algaworks.algashop.product.catalog.presentation.ProductController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -64,6 +65,7 @@ public class ProductBase {
         mockFilterProducts();
         mockCreateProduct();
         mockInvalidProductFindById();
+        mockValidProductUpdate();
     }
 
     private void mockInvalidProductFindById() {
@@ -72,11 +74,12 @@ public class ProductBase {
     }
 
     private void mockCreateProduct() {
+        ProductDetailOutput productDetailOutput = ProductDetailOutputTestDataBuilder.aProduct().id(createdProductId).inStock(false).build();
         Mockito.when(productManagementApplicationService.create(Mockito.any(ProductInput.class)))
-                .thenReturn(createdProductId);
+                .thenReturn(productDetailOutput);
 
         Mockito.when(productQueryService.findById(createdProductId))
-                .thenReturn(ProductDetailOutputTestDataBuilder.aProduct().inStock(false).build());
+                .thenReturn(productDetailOutput);
     }
 
     private void mockFilterProducts() {
@@ -100,6 +103,11 @@ public class ProductBase {
 
     private void mockValidProductFindById() {
         Mockito.when(productQueryService.findById(validProductId))
+                .thenReturn(ProductDetailOutputTestDataBuilder.aProduct().id(validProductId).build());
+    }
+
+    private void mockValidProductUpdate() {
+        Mockito.when(productManagementApplicationService.update(Mockito.any(UUID.class), Mockito.any(ProductInput.class)))
                 .thenReturn(ProductDetailOutputTestDataBuilder.aProduct().id(validProductId).build());
     }
 
