@@ -1,32 +1,37 @@
 spring:
-  cache:
-    type: redis
-  mongodb:
-    uri: mongodb://localhost:27017,localhost:27018,localhost:27019/product_catalog?replicaSet=rs0
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: algashop
-      database: 0
-      timeout: 20
+  config:
+    import:
+      - aws-secretsmanager:/secret/algashop/product-catalog/aws-s3?prefix=catalog.secrets.
+      - aws-secretsmanager:/secret/algashop/product-catalog/redis-password?prefix=catalog.secrets.
+      - aws-parameterstore:/config/algashop/product-catalog?prefix=catalog.params
+      - aws-parameterstore:/config/algashop/shared?prefix=shared.params
   cloud:
     aws:
       region:
         static: us-east-1
       endpoint: http://algashop-localstack:4566
       credentials:
-        access-key: LSIAQAAAAAAVNCBMPNSG
-        secret-key: test
+        access-key: ${catalog.secrets.access-key}
+        secret-key: ${catalog.secrets.secret-key}
       s3:
         enabled: true
         path-style-access-enabled: true
+  cache:
+    type: redis
+  mongodb:
+    uri: ${catalog.params.mongodb.uri}
+  data:
+    redis:
+      host: ${catalog.params.redis.host}
+      port: ${catalog.params.redis.port}
+      password: ${catalog.secrets.redis-password}
+      database: ${catalog.params.redis.database}
+      timeout: ${catalog.params.redis.timeout}
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://auth.algashop.local:8081
-          #jwk-set-uri: http://127.0.0.1:8081/oauth2/jwks
+          issuer-uri: ${shared.params.auth-server-url}
 
 logging:
   level:
@@ -40,7 +45,7 @@ algashop:
     enabled: true
     auto-delete: true
   mapping:
-    image-storage-url: http://algashop-localstack:4566/algashop-product-image
+    image-storage-url: ${catalog.params.storage.image-storage-url}
   storage:
     s3:
-      bucket-name: algashop-product-image
+      bucket-name: ${catalog.params.storage.bucket-name}
