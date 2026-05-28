@@ -49,7 +49,7 @@ public class ProductController {
     @SneakyThrows
     public ResponseEntity<ProductDetailOutput> findById(@PathVariable UUID productId) {
         log.info("Get product {}", productId);
-        if (Math.random() < 0.7) {
+        if (Math.random() < 0.5) {
             Thread.sleep(Duration.ofMillis(100));
             throw new RuntimeException("Fake exception");
         }
