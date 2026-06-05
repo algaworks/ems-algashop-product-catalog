@@ -42,12 +42,12 @@ public class ProductQueryServiceImpl implements ProductQueryService {
 
     @Override
     public PageModel<ProductSummaryOutput> filter(ProductFilter filter) {
-        Optional<Criteria> criteria = buildCriteria(filter);
+        Optional<List<CriteriaDefinition>> criteria = buildCriteria(filter);
         Optional<TextCriteria> textCriteria = buildTextCriteria(filter);
 
         Query query = new Query();
         textCriteria.ifPresent(query::addCriteria);
-        criteria.ifPresent(query::addCriteria);
+        criteria.ifPresent(definitions -> definitions.forEach(query::addCriteria));
 
         long totalElements = mongoOperations.count(query, Product.class);
 
@@ -68,14 +68,15 @@ public class ProductQueryServiceImpl implements ProductQueryService {
                     new Document("$addFields", new Document("score", new Document("$meta", "textScore")));
             operations.add(addTextScoreField);
         });
-        criteria.ifPresent(c -> operations.add(match(c)));
+        criteria.ifPresent(definitions ->
+                definitions.forEach(definition -> operations.add(match(definition))));
 
         PageRequest pageRequest = PageRequest.of(filter.getPage(), filter.getSize());
 
         operations.addAll(Arrays.asList(
-           sort(sortWith(filter)),
-           skip(pageRequest.getOffset()),
-           limit(filter.getSize())
+                sort(sortWith(filter)),
+                skip(pageRequest.getOffset()),
+                limit(filter.getSize())
         ));
 
         Aggregation aggregation = newAggregation(operations);
@@ -98,7 +99,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
                 .build();
     }
 
-    private Optional<Criteria> buildCriteria(ProductFilter filter) {
+    private Optional<List<CriteriaDefinition>> buildCriteria(ProductFilter filter) {
         List<CriteriaDefinition> criterias = new ArrayList<>();
 
         if (filter.getEnabled() != null) {
@@ -163,9 +164,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
             return Optional.empty();
         }
 
-        return Optional.of(
-                new Criteria().andOperator(criterias.toArray(new Criteria[0]))
-        );
+        return Optional.of(criterias);
     }
 
     public Optional<TextCriteria> buildTextCriteria(ProductFilter filter) {
