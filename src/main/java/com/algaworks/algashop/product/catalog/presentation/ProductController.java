@@ -52,7 +52,7 @@ public class ProductController {
         Thread.sleep(Duration.ofMillis(100));
         ProductDetailOutput product = productQueryService.findById(productId);
         return ResponseEntity.ok()
-                .cacheControl(CacheControl.maxAge(Duration.ofMinutes(1)).cachePublic())
+                .cacheControl(CacheControl.noCache())
                 .eTag("product:id:" + product.getId() + ":v:" + product.getVersion())
                 .lastModified(product.getUpdatedAt().toInstant())
                 .body(product);
