@@ -61,6 +61,7 @@ dependencies {
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-secrets-manager'
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.boot:spring-boot-starter-kafka'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
@@ -72,6 +73,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-cache-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-data-redis-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-kafka-test'
     constraints {
         testImplementation('io.rest-assured:rest-assured:6.0.0') {
             version {
