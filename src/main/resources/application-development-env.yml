@@ -32,11 +32,14 @@ spring:
         jwt:
           issuer-uri: ${shared.params.auth-server-url}
   kafka:
-    bootstrap-servers: algashop-kafka-1:9092,algashop-kafka-2:9093,algashop-kafka-3:9094 #ponto inicial de conexão
+    bootstrap-servers: algashop-kafka-1:9092,algashop-kafka-2:9093,algashop-kafka-3:9094
     admin:
-      fail-fast: true # Falha rápida caso não consiga se conectar ao cluster
-      auto-create: true # Permite a criação automática de tópicos caso não existam
-      modify-topic-configs: false # Impede a modificação de configurações de tópicos existentes
+      fail-fast: true
+      auto-create: true
+      modify-topic-configs: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
 
 logging:
   level:
