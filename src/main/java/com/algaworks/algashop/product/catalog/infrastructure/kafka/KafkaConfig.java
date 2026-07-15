@@ -25,8 +25,8 @@ public class KafkaConfig {
 	public IntegrationEventPublisher integrationEventPublisher(KafkaTemplate<String, Object> kafkaTemplate) {
 		return new IntegrationEventPublisher() {
 			@Override
-			public void send(Object event, String destination) {
-				kafkaTemplate.send(destination, event);
+			public void send(Object event, String key, String destination) {
+				kafkaTemplate.send(destination, key, event);
 			}
 		};
 	}
