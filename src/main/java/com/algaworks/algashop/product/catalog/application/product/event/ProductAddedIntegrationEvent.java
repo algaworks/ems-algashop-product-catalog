@@ -9,7 +9,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductListedIntegrationEvent {
+public class ProductAddedIntegrationEvent {
 	private UUID productId;
-	private OffsetDateTime listedAt;
+	private OffsetDateTime addedAt;
 }

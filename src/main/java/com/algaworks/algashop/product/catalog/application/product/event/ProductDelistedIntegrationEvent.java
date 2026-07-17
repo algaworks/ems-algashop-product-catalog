@@ -5,12 +5,10 @@ import lombok.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
-@ToString
+@Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProductDelistedIntegrationEvent {
 	private UUID productId;
 	private OffsetDateTime delistedAt;
