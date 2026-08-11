@@ -19,7 +19,6 @@ public class ProductEventListener {
     private final Mapper mapper;
 
     @EventListener(ProductPriceChangedEvent.class)
-    @Async
     public void handle(ProductPriceChangedEvent event) {
         log.info("ProductPriceChangedEvent " + event);
         var integrationEvent = mapper.convert(event, ProductPriceChangedIntegrationEvent.class);

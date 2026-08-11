@@ -27,6 +27,7 @@ public class ProductManagementApplicationService {
 
     private final Mapper mapper;
 
+    @Transactional
     @CachePut(cacheNames = "algashop:products:v1", key = "#result.id",
             condition = "#input.enabled == true")
     public ProductDetailOutput create(ProductInput input) {
@@ -35,6 +36,7 @@ public class ProductManagementApplicationService {
         return mapper.convert(product, ProductDetailOutput.class);
     }
 
+    @Transactional
     @CachePut(cacheNames = "algashop:products:v1", key = "#result.id",
             condition = "#input.enabled == true")
     @CacheEvict(cacheNames = "algashop:products:v1", key = "#productId",
@@ -51,6 +53,7 @@ public class ProductManagementApplicationService {
         return mapper.convert(product, ProductDetailOutput.class);
     }
 
+    @Transactional
     @CacheEvict(cacheNames = "algashop:products:v1", key = "#productId")
     public void disable(UUID productId) {
         Product product = findProduct(productId);
@@ -58,6 +61,7 @@ public class ProductManagementApplicationService {
         productRepository.save(product);
     }
 
+    @Transactional
     @CacheEvict(cacheNames = "algashop:products:v1", key = "#productId")
     public void enable(UUID productId) {
         Product product = findProduct(productId);
@@ -71,9 +75,6 @@ public class ProductManagementApplicationService {
         Product product = findProduct(productId);
         StockMovement movement = stockService.restock(product, quantity);
         stockMovementRepository.save(movement);
-        if (quantity == 2) {
-            throw new RuntimeException();
-        }
     }
 
     @Transactional
