@@ -38,6 +38,7 @@ spring:
       auto-create: true
       modify-topic-configs: false
     producer:
+      acks: all # min insync = 2
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
       #retries: 100
@@ -45,7 +46,7 @@ spring:
         #retry.backoff.ms: 100
         #retry.backoff.max.ms: 1000
         request.timeout.ms: 5000
-        delivery.timeout.ms: 10000
+        delivery.timeout.ms: 30000
         max.block.ms: 5000
         spring.json.type.mapping:
           ProductCatalog.ProductDelistedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductDelistedIntegrationEvent,
