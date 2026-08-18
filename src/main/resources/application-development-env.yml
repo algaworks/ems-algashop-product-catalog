@@ -43,6 +43,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
       #retries: 100
       properties:
+        enable.idempotence: true
         #retry.backoff.ms: 100
         #retry.backoff.max.ms: 1000
         request.timeout.ms: 5000
