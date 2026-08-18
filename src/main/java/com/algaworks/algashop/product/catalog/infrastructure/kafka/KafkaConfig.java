@@ -31,7 +31,7 @@ public class KafkaConfig {
 				.configs(Map.of("min.insync.replicas", "2"))
 				.build();
 	}
-
+//
 	@Bean
 	public ProductIntegrationEventPublisher productIntegrationEventPublisher(
 			KafkaTemplate<String, Object> kafkaTemplate,

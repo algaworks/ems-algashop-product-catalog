@@ -22,10 +22,11 @@ public class ProductEventListener {
     @EventListener(ProductPriceChangedEvent.class)
     public void handle(ProductPriceChangedEvent event) {
         log.info("ProductPriceChangedEvent " + event);
-        var integrationEvent = mapper.convert(event, ProductPriceChangedIntegrationEvent.class);
-        integrationEventPublisher.send(integrationEvent);
 
+        var integrationEvent = mapper.convert(event, ProductPriceChangedIntegrationEvent.class);
         var v2IntegrationEvent = mapper.convert(event, ProductPriceChangedV2IntegrationEvent.class);
+
+        integrationEventPublisher.send(integrationEvent);
         integrationEventPublisher.send(v2IntegrationEvent);
     }
 
