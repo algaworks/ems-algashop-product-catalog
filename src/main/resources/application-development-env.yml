@@ -33,6 +33,13 @@ spring:
           issuer-uri: ${shared.params.auth-server-url}
   kafka:
     bootstrap-servers: algashop-kafka-1:9092,algashop-kafka-2:9093,algashop-kafka-3:9094
+    properties:
+      spring.json.type.mapping:
+        ProductCatalog.ProductDelistedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductDelistedIntegrationEvent,
+        ProductCatalog.ProductListedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductListedIntegrationEvent,
+        ProductCatalog.ProductAddedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductAddedIntegrationEvent,
+        ProductCatalog.ProductPriceChangedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedIntegrationEvent,
+        ProductCatalog.ProductPriceChangedV2IntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedV2IntegrationEvent
     admin:
       fail-fast: true
       auto-create: true
@@ -49,12 +56,6 @@ spring:
         request.timeout.ms: 5000
         delivery.timeout.ms: 30000
         max.block.ms: 5000
-        spring.json.type.mapping:
-          ProductCatalog.ProductDelistedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductDelistedIntegrationEvent,
-          ProductCatalog.ProductListedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductListedIntegrationEvent,
-          ProductCatalog.ProductAddedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductAddedIntegrationEvent,
-          ProductCatalog.ProductPriceChangedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedIntegrationEvent,
-          ProductCatalog.ProductPriceChangedV2IntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedV2IntegrationEvent
 
 logging:
   level:
