@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class CategoryManagementApplicationService {
     private final CategoryRepository categoryRepository;
     private final LocalEventPublisher localEventPublisher;
 
+    @Transactional
     @CacheEvict(value = "algashop:categories-filter:v1", key = "'default'")
     public UUID create(@Valid CategoryInput input) {
         Category category = new Category(input.getName(), input.getEnabled());
@@ -27,6 +29,7 @@ public class CategoryManagementApplicationService {
         return category.getId();
     }
 
+    @Transactional
     @Caching(
             evict = {
                     @CacheEvict(value = "algashop:categories-filter:v1", key = "'default'"),
@@ -47,6 +50,13 @@ public class CategoryManagementApplicationService {
         ));
     }
 
+    @Transactional
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "algashop:categories-filter:v1", key = "'default'"),
+                    @CacheEvict(value = "algashop:categories:v1", key = "#categoryId")
+            }
+    )
     public void disable(UUID categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
