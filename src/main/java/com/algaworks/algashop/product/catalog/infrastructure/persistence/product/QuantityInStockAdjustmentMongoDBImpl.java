@@ -12,12 +12,15 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.MANDATORY)
 public class QuantityInStockAdjustmentMongoDBImpl implements QuantityInStockAdjustment {
 
     private final MongoOperations mongoOperations;

@@ -1,43 +1,33 @@
 package com.algaworks.algashop.product.catalog.domain.model.stock;
 
-import com.algaworks.algashop.product.catalog.domain.model.DomainEventPublisher;
 import com.algaworks.algashop.product.catalog.domain.model.DomainException;
 import com.algaworks.algashop.product.catalog.domain.model.product.Product;
-import com.algaworks.algashop.product.catalog.domain.model.product.ProductRestockedEvent;
-import com.algaworks.algashop.product.catalog.domain.model.product.ProductSoldOutEvent;
+import com.algaworks.algashop.product.catalog.domain.model.product.ProductNotFoundException;
+import com.algaworks.algashop.product.catalog.domain.model.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class StockService {
 
     private final QuantityInStockAdjustment quantityInStockAdjustment;
-    private final DomainEventPublisher domainEventPublisher;
+    private final ProductRepository productRepository;
 
-    public StockMovement restock(Product product, int quantity) {
-        Objects.requireNonNull(product);
+    public StockMovement restock(UUID productId, int quantity) {
+        Objects.requireNonNull(productId);
         if (quantity < 1) {
             throw new IllegalArgumentException();
         }
 
-        QuantityInStockAdjustment.Result result;
-        try {
-            result = quantityInStockAdjustment.increase(product.getId(), quantity);
-        } catch (Exception e) {
-            throw new DomainException(String.format("Failed to restock product %s", product.getId()));
-        }
-
-        if (result.inRestocked()) {
-            domainEventPublisher.publish(
-                    ProductRestockedEvent.builder().productId(product.getId()).build()
-            );
-        }
+        QuantityInStockAdjustment.Result result = quantityInStockAdjustment.increase(productId, quantity);;
 
         return StockMovement.builder()
-                .productId(product.getId())
+                .productId(productId)
                 .movementQuantity(quantity)
                 .previousQuantity(result.previousQuantity())
                 .newQuantity(result.newQuantity())
@@ -45,32 +35,52 @@ public class StockService {
                 .build();
     }
 
-    public StockMovement withdraw(Product product, int quantity) {
-        Objects.requireNonNull(product);
+    public StockMovement withdraw(UUID productId, int quantity, String orderId) {
+        Objects.requireNonNull(productId);
         if (quantity <1) {
             throw new IllegalArgumentException();
         }
 
-        QuantityInStockAdjustment.Result result;
-        try {
-            result = quantityInStockAdjustment.decrease(product.getId(), quantity);
-        } catch (Exception e) {
-            throw new DomainException(String.format("Failed to withdrawn product %s from stock", product.getId()));
-        }
-
-        if (result.isOutOfStock()) {
-            domainEventPublisher.publish(
-                    ProductSoldOutEvent.builder().productId(product.getId()).build()
-            );
-        }
+        QuantityInStockAdjustment.Result result = quantityInStockAdjustment.decrease(productId, quantity);
 
         return StockMovement.builder()
-                .productId(product.getId())
+                .productId(productId)
                 .movementQuantity(quantity)
                 .previousQuantity(result.previousQuantity())
                 .newQuantity(result.newQuantity())
                 .type(StockMovement.MovementType.STOCK_OUT)
+                .orderId(orderId)
                 .build();
+    }
+
+    public List<StockMovement> withdrawAll(String orderId, List<StockReservationItem> items) {
+
+        Map<UUID, Integer> quantityByProduct = items.stream().collect(
+                Collectors.groupingBy(
+                        StockReservationItem::getProductId,
+                        Collectors.summingInt(StockReservationItem::getQuantity)
+                )
+        );
+
+        Map<UUID, Product> productById = productRepository.findAllById(quantityByProduct.keySet())
+                .stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+
+        quantityByProduct.forEach((productId, quantity) -> {
+            Product product = productById.get(productId);
+
+            if (product == null) {
+                throw new ProductNotFoundException(productId);
+            }
+
+            if (!product.hasQuantity(quantity)) {
+                throw new InsufficientStockException(productId, quantity, product.getQuantityInStock());
+            }
+        });
+
+        return quantityByProduct.entrySet().stream()
+                .map(entry -> withdraw(entry.getKey(), entry.getValue(), orderId))
+                .toList();
     }
 
 }

@@ -76,7 +76,7 @@ public class ProductManagementApplicationService {
     @CacheEvict(cacheNames = "algashop:products:v1", key = "#productId")
     public void restock(UUID productId, int quantity) {
         Product product = findProduct(productId);
-        StockMovement movement = stockService.restock(product, quantity);
+        StockMovement movement = stockService.restock(product.getId(), quantity);
         stockMovementRepository.save(movement);
     }
 
@@ -84,7 +84,7 @@ public class ProductManagementApplicationService {
     @CacheEvict(cacheNames = "algashop:products:v1", key = "#productId")
     public void withdraw(UUID productId, int quantity) {
         Product product = findProduct(productId);
-        StockMovement movement = stockService.withdraw(product, quantity);
+        StockMovement movement = stockService.withdraw(product.getId(), quantity, null);
         stockMovementRepository.save(movement);
     }
 
