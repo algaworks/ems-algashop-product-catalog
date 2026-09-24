@@ -2,8 +2,7 @@ package com.algaworks.algashop.product.catalog.infrastructure.persistence.produc
 
 import com.algaworks.algashop.product.catalog.domain.model.product.Product;
 import com.algaworks.algashop.product.catalog.domain.model.product.ProductNotFoundException;
-import com.algaworks.algashop.product.catalog.domain.model.product.QuantityInStockAdjustment;
-import com.mongodb.client.result.UpdateResult;
+import com.algaworks.algashop.product.catalog.domain.model.stock.QuantityInStockAdjustment;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;

@@ -1,4 +1,4 @@
-package com.algaworks.algashop.product.catalog.domain.model.product;
+package com.algaworks.algashop.product.catalog.domain.model.stock;
 
 import com.algaworks.algashop.product.catalog.domain.model.IdGenerator;
 import lombok.*;
