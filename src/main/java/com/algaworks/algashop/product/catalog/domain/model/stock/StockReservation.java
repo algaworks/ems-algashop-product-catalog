@@ -25,7 +25,7 @@ public class StockReservation extends AbstractAggregateRoot<StockReservation> {
 	@EqualsAndHashCode.Include
 	private UUID id;
 
-	@Indexed(name = "uidx_stock_reservation_by_order", unique = true, collation = "en")
+	@Indexed(name = "uidx_stock_reservation_by_order", unique = true)
 	private String orderId;
 
 	private Status status;
