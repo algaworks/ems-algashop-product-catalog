@@ -33,7 +33,8 @@ public class ProductEventListener {
     @Async
     public void handle(ProductPlacedOnSaleEvent event) {
         log.info("ProductPlacedOnSaleEvent " + event);
-//        integrationEventPublisher.send(event, event.getProductId().toString(),"product-catalog.product.events");
+        var integrationEvent = mapper.convert(event, ProductPlacedOnSaleIntegrationEvent.class);
+        integrationEventPublisher.send(integrationEvent);
     }
 
     @TransactionalEventListener
@@ -64,14 +65,16 @@ public class ProductEventListener {
     @Async
     public void handle(ProductRestockedEvent event) {
         log.info("ProductRestockedEvent  " + event);
-//        integrationEventPublisher.send(event, event.getProductId().toString(),"product-catalog.product.events");
+        var integrationEvent = mapper.convert(event, ProductRestockedIntegrationEvent.class);
+        integrationEventPublisher.send(integrationEvent);
     }
 
     @TransactionalEventListener
     @Async
     public void handle(ProductSoldOutEvent event) {
         log.info("ProductSoldOutEvent " + event);
-//        integrationEventPublisher.send(event, event.getProductId().toString(),"product-catalog.product.events");
+        var integrationEvent = mapper.convert(event, ProductSoldOutIntegrationEvent.class);
+        integrationEventPublisher.send(integrationEvent);
     }
 
 }
