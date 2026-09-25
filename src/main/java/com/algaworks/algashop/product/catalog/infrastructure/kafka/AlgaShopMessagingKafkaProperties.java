@@ -18,5 +18,8 @@ public class AlgaShopMessagingKafkaProperties {
 	private String orderEventTopicName;
 
 	@NotBlank
+	private String stockEventTopicName;
+
+	@NotBlank
 	private String orderEventsConsumerGroup;
 }

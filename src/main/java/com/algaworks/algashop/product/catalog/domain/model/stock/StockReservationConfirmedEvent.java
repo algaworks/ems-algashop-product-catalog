@@ -15,5 +15,5 @@ public class StockReservationConfirmedEvent {
 	private String orderId;
 
 	@Builder.Default
-	private OffsetDateTime confirmed = OffsetDateTime.now();
+	private OffsetDateTime confirmedAt = OffsetDateTime.now();
 }

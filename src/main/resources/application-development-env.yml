@@ -40,7 +40,9 @@ spring:
         ProductCatalog.ProductListedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductListedIntegrationEvent,
         ProductCatalog.ProductAddedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductAddedIntegrationEvent,
         ProductCatalog.ProductPriceChangedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedIntegrationEvent,
-        ProductCatalog.ProductPriceChangedV2IntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedV2IntegrationEvent
+        ProductCatalog.ProductPriceChangedV2IntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedV2IntegrationEvent,
+        ProductCatalog.StockReservationConfirmedIntegrationEvent:com.algaworks.algashop.product.catalog.application.stock.event.StockReservationConfirmedIntegrationEvent,
+        ProductCatalog.StockReservationRejectedIntegrationEvent:com.algaworks.algashop.product.catalog.application.stock.event.StockReservationRejectedIntegrationEvent
     admin:
       fail-fast: true
       auto-create: true
@@ -88,6 +90,7 @@ algashop:
     kafka:
       product-event-topic-name: product-catalog.product.events
       order-event-topic-name: ordering.order.events
+      stock-event-topic-name: product-catalog.stock.events
       order-events-consumer-group: product-catalog.order-events
 
 eureka:

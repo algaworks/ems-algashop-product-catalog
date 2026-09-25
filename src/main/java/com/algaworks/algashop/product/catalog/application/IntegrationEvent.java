@@ -8,5 +8,7 @@ public interface IntegrationEvent {
 	@JsonIgnore
 	String getAggregateId();
 	@JsonIgnore
-	UUID getIdempotencyKey();
+	default UUID getIdempotencyKey() {
+		return null;
+	}
 }
