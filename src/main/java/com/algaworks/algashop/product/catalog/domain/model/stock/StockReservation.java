@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@Document(collation = "stock_reservations")
+@Document(collection = "stock_reservations")
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
