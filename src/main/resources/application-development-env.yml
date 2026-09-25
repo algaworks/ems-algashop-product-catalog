@@ -56,6 +56,15 @@ spring:
         request.timeout.ms: 5000
         delivery.timeout.ms: 30000
         max.block.ms: 5000
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+        spring.json.trusted.packages: com.algaworks.algashop.*
+        spring.json.key.default.type: java.lang.String
+        spring.json.value.default.type: java.lang.String
+        spring.json.value.type.method: com.algaworks.algashop.product.catalog.infrastructure.kafka.KafkaConsumerTypeIdIdentifier.readType
 
 logging:
   level:
@@ -77,6 +86,8 @@ algashop:
   messaging:
     kafka:
       product-event-topic-name: product-catalog.product.events
+      order-event-topic-name: ordering.order.events
+      order-events-consumer-group: product-catalog.order-events
 
 eureka:
   client:
