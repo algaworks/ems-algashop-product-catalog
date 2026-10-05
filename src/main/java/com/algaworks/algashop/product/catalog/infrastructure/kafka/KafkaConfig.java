@@ -3,7 +3,6 @@ package com.algaworks.algashop.product.catalog.infrastructure.kafka;
 import com.algaworks.algashop.product.catalog.application.EventPublishingException;
 import com.algaworks.algashop.product.catalog.application.IntegrationEvent;
 import com.algaworks.algashop.product.catalog.application.product.event.ProductIntegrationEventPublisher;
-import com.algaworks.algashop.product.catalog.application.stock.event.StockIntegrationEventPublisher;
 import com.algaworks.algashop.product.catalog.domain.model.DomainException;
 import com.algaworks.algashop.product.catalog.infrastructure.persistence.product.StockUpdateFailed;
 import com.algaworks.algashop.product.catalog.infrastructure.utility.BeanValidationUtil;
@@ -53,20 +52,6 @@ public class KafkaConfig {
 				.build();
 	}
 
-	@Bean
-	public NewTopic stockEventTopic(AlgaShopMessagingKafkaProperties properties) {
-		return TopicBuilder.name(properties.getStockEventTopicName())
-				.partitions(TOPIC_PARTITIONS)
-				.replicas(TOPIC_REPLICAS)
-				.configs(Map.of("min.insync.replicas", "2"))
-				.build();
-	}
-
-	@Bean
-	public NewTopic orderEventsDlt(AlgaShopMessagingKafkaProperties properties) {
-		return deadLetterTopic(properties.getOrderEventTopicName());
-	}
-
 	private NewTopic deadLetterTopic(String sourceTopic) {
 		return TopicBuilder.name(DLT_PREFIX + sourceTopic)
 				.partitions(TOPIC_PARTITIONS)
@@ -111,15 +96,6 @@ public class KafkaConfig {
 			AlgaShopMessagingKafkaProperties properties,
 			BeanValidationUtil beanValidationUtil) {
 		return event -> publish(event, properties.getProductEventTopicName(),
-				kafkaTemplate, beanValidationUtil);
-	}
-
-	@Bean
-	public StockIntegrationEventPublisher stockIntegrationEventPublisher(
-			KafkaTemplate<String, Object> kafkaTemplate,
-			AlgaShopMessagingKafkaProperties properties,
-			BeanValidationUtil beanValidationUtil) {
-		return event -> publish(event, properties.getStockEventTopicName(),
 				kafkaTemplate, beanValidationUtil);
 	}
 

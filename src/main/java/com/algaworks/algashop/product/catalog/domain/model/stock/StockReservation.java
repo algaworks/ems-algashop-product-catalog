@@ -4,7 +4,6 @@ package com.algaworks.algashop.product.catalog.domain.model.stock;
 import com.algaworks.algashop.product.catalog.domain.model.IdGenerator;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,7 +18,7 @@ import java.util.UUID;
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class StockReservation extends AbstractAggregateRoot<StockReservation> {
+public class StockReservation {
 
 	@Id
 	@EqualsAndHashCode.Include
@@ -47,25 +46,11 @@ public class StockReservation extends AbstractAggregateRoot<StockReservation> {
 	}
 
 	public static StockReservation confirmed(String orderId, List<StockReservationItem> items) {
-		StockReservation stockReservation = new StockReservation(orderId, Status.CONFIRMED, items);
-		stockReservation.registerEvent(
-				StockReservationConfirmedEvent.builder()
-						.reservationId(stockReservation.id)
-						.orderId(stockReservation.orderId)
-						.build()
-		);
-		return stockReservation;
+		return new StockReservation(orderId, Status.CONFIRMED, items);
 	}
 
 	public static StockReservation rejected(String orderId, List<StockReservationItem> items) {
-		StockReservation stockReservation = new StockReservation(orderId, Status.REJECT, items);
-		stockReservation.registerEvent(
-				StockReservationRejectedEvent.builder()
-						.reservationId(stockReservation.id)
-						.orderId(stockReservation.orderId)
-						.build()
-		);
-		return stockReservation;
+		return new StockReservation(orderId, Status.REJECT, items);
 	}
 
 	public List<StockReservationItem> getItems() {

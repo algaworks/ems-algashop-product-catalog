@@ -35,7 +35,6 @@ spring:
     bootstrap-servers: algashop-kafka-1:9092,algashop-kafka-2:9093,algashop-kafka-3:9094
     properties:
       spring.json.type.mapping:
-        Ordering.OrderPaidIntegrationEvent:com.algaworks.algashop.product.catalog.application.order.event.OrderPaidIntegrationEvent,
         ProductCatalog.ProductDelistedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductDelistedIntegrationEvent,
         ProductCatalog.ProductListedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductListedIntegrationEvent,
         ProductCatalog.ProductAddedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductAddedIntegrationEvent,
@@ -43,9 +42,7 @@ spring:
         ProductCatalog.ProductRestockedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductRestockedIntegrationEvent,
         ProductCatalog.ProductSoldOutIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductSoldOutIntegrationEvent,
         ProductCatalog.ProductPriceChangedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedIntegrationEvent,
-        ProductCatalog.ProductPriceChangedV2IntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedV2IntegrationEvent,
-        ProductCatalog.StockReservationConfirmedIntegrationEvent:com.algaworks.algashop.product.catalog.application.stock.event.StockReservationConfirmedIntegrationEvent,
-        ProductCatalog.StockReservationRejectedIntegrationEvent:com.algaworks.algashop.product.catalog.application.stock.event.StockReservationRejectedIntegrationEvent
+        ProductCatalog.ProductPriceChangedV2IntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedV2IntegrationEvent
     admin:
       fail-fast: true
       auto-create: true
@@ -92,9 +89,6 @@ algashop:
   messaging:
     kafka:
       product-event-topic-name: product-catalog.product.events
-      order-event-topic-name: ordering.order.events
-      stock-event-topic-name: product-catalog.stock.events
-      order-events-consumer-group: product-catalog.order-events
 
 eureka:
   client:
