@@ -1,7 +1,7 @@
 package com.algaworks.algashop.product.catalog.application.product.event;
 
-import com.algaworks.algashop.product.catalog.application.IntegrationEvent;
+import com.algaworks.algashop.product.catalog.application.OutboundIntegrationEvent;
 
 public interface ProductIntegrationEventPublisher {
-	void send(IntegrationEvent event);
+	void send(OutboundIntegrationEvent event);
 }
