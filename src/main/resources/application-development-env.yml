@@ -42,7 +42,10 @@ spring:
         ProductCatalog.ProductRestockedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductRestockedIntegrationEvent,
         ProductCatalog.ProductSoldOutIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductSoldOutIntegrationEvent,
         ProductCatalog.ProductPriceChangedIntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedIntegrationEvent,
-        ProductCatalog.ProductPriceChangedV2IntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedV2IntegrationEvent
+        ProductCatalog.ProductPriceChangedV2IntegrationEvent:com.algaworks.algashop.product.catalog.application.product.event.ProductPriceChangedV2IntegrationEvent,
+        Stock.ReserveStockIntegrationCommand:com.algaworks.algashop.product.catalog.application.stock.command.ReserveStockIntegrationCommand,
+        Stock.StockReservationConfirmedIntegrationReply:com.algaworks.algashop.product.catalog.application.stock.reply.StockReservationConfirmedIntegrationReply,
+        Stock.StockReservationRejectedIntegrationReply:com.algaworks.algashop.product.catalog.application.stock.reply.StockReservationRejectedIntegrationReply
     admin:
       fail-fast: true
       auto-create: true
@@ -90,6 +93,7 @@ algashop:
     kafka:
       product-event-topic-name: product-catalog.product.events
       stock-commands-topic-name: product-catalog.stock.commands
+      stock-commands-consumer-group: product-catalog.stock-commands
 
 eureka:
   client:
