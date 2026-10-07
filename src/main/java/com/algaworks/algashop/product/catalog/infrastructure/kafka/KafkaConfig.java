@@ -7,6 +7,7 @@ import com.algaworks.algashop.product.catalog.domain.model.DomainException;
 import com.algaworks.algashop.product.catalog.infrastructure.persistence.product.StockUpdateFailed;
 import com.algaworks.algashop.product.catalog.infrastructure.utility.BeanValidationUtil;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeoutException;
 
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class KafkaConfig {
 
 	private static final String DLT_PREFIX = "product-catalog.dlt.";
@@ -43,9 +45,20 @@ public class KafkaConfig {
 	private static final int TOPIC_REPLICAS = 3;
 	private static final long RETENTION_30_DAYS = Duration.ofDays(30).toMillis();
 
+	private final AlgaShopMessagingKafkaProperties properties;
+
 	@Bean
 	public NewTopic productsEventTopic() {
-		return TopicBuilder.name("product-catalog.product.events")
+		return TopicBuilder.name(properties.getProductEventTopicName())
+				.partitions(TOPIC_PARTITIONS)
+				.replicas(TOPIC_REPLICAS)
+				.configs(Map.of("min.insync.replicas", "2"))
+				.build();
+	}
+
+	@Bean
+	public NewTopic stockCommandsTopic() {
+		return TopicBuilder.name(properties.getStockCommandsTopicName())
 				.partitions(TOPIC_PARTITIONS)
 				.replicas(TOPIC_REPLICAS)
 				.configs(Map.of("min.insync.replicas", "2"))
